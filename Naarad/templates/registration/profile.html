@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{user.username}}
+{% endblock %}
+
+{% block content %}
+<div class="profile-container" style="background-color: #343a40; color: white; padding: 30px; border-radius: 10px; max-width: 800px; margin: 50px auto;">
+        
+  <!-- Profile Header -->
+  <div class="profile-header" style="text-align: center; border-bottom: 1px solid #ccc; padding-bottom: 20px; margin-bottom: 20px;">
+      <h2 style="color: white;">{{ user.username }}</h2>
+      <p>Welcome to your profile, where you can manage your details and settings.</p>
+  </div>
+
+  <!-- Profile Details -->
+  <div class="profile-details" style="font-size: 1.2rem;">
+      <div class="mb-3">
+          <span class="label" style="font-weight: bold;">Username: </span>
+          <span>{{ user.username }}</span>
+      </div>
+      <div class="mb-3">
+          <span class="label" style="font-weight: bold;">Email: </span>
+          <span>{{user.email}}</span>
+      </div>
+      <div class="mb-3">
+          <span class="label" style="font-weight: bold;">Address: </span>
+          <span>{{user.profile.address}}</span>
+      </div>
+      <div class="mb-3">
+          <span class="label" style="font-weight: bold;">Joined: </span>
+          <span>{{user.date_joined}}</span>
+      </div>
+      <div class="mb-3">
+          <span class="label" style="font-weight: bold;">Points: </span>
+          <span>{{user.profile.points}}</span>
+      </div>
+      <div class="mb-3">
+          <span class="label" style="font-weight: bold;">Validity: </span>
+          <span>{{user.profile.validity}}%</span>
+      </div>
+      
+      {% if user == request.user %}
+        <a href="{% url 'index' %}" class="btn btn-primary">Edit My Profile</a>
+      {% endif %}
+  </div>
+
+  <!-- Profile Footer -->
+  <div class="profile-footer" style="text-align: center; margin-top: 30px;">
+    {% if user == request.user %}
+    <a href="{% url 'index' %}" class="btn btn-danger">Logout</a> 
+    {% endif %}
+     
+  </div>
+</div>
+{% endblock %}

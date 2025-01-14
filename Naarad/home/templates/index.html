@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}
+ Naarad
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="https://e7.pngegg.com/pngimages/726/169/png-clipart-australian-broadcasting-corporation-abc-logo-television-c-television-text.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+        Naarad
+      </a>
+    </div>
+  </nav>
+{% endblock navbar %}
+
+{% block content %}
+<div class="container-fluid bg-dark min-vh-100 d-flex align-items-center">
+    <div class="row w-100">
+        <!-- Intro Section -->
+        <div class="col-md-6 d-flex flex-column justify-content-center align-items-start px-5">
+            <h1 class="display-4 fw-bold mb-3 text-danger">Welcome to Naarad</h1>
+            <p class="lead text-light mb-4">
+                A gamified, community-powered platform bringing real news right to your fingertips. 
+            </p>
+            <div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'news_list' %}" class="btn btn-secondary btn-lg me-3">Go to News</a>
+                    <form method="post" action="{% url 'logout' %}" class="d-inline" onsubmit="return confirm('Are you sure you want to log out?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-lg me-3">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-success btn-lg me-3">Register</a>
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-3">Login</a>
+                {% endif %}
+                
+                <a href="/know-more" class="btn btn-outline-info btn-lg">Know More</a>
+            </div>
+        </div>
+
+        <!-- Graphics/Image Section -->
+        <div class="col-md-6 d-flex justify-content-center align-items-center">
+            <img src="static\landing.png" alt="Landing Graphic" class="img-fluid" style="max-height: 70vh;">
+        </div>
+    </div>
+</div>
+{% endblock %}

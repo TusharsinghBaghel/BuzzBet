@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Logged_out
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="https://e7.pngegg.com/pngimages/726/169/png-clipart-australian-broadcasting-corporation-abc-logo-television-c-television-text.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+        Naarad
+      </a>
+    </div>
+  </nav>
+{% endblock navbar %}
+
+
+{% block content %}
+<h2>LOGGED OUT</h2>
+
+<p>You have been logged out <a href="{% url 'login'%}">login again</a></p>
+{% endblock %}
+\

@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block title %}{{ news.headline }}{% endblock %}
+
+
+
+{% block content %}
+<div class="container mt-5">
+    <!-- News Details -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- News Photo -->
+            
+            <h1 class="display-4 fw-bold">{{ news.headline }}</h1>
+            {% if news.photo %}
+                <div class="text-center my-4">
+                    <img src="{{ news.photo.url }}" class="img-fluid rounded shadow-sm" alt="{{ news.headline }}">
+                </div>
+            {% endif %}
+
+            <a href="{% url 'profile_with_pk' news.author.pk %}"><p class="text-muted">By <strong>{{ news.author.username }}</strong> | {{ news.created_at|date:"M d, Y" }}</p></a>
+            <p class="lead">{{ news.content }}</p>
+            
+            
+            <!-- Validation and Impact Form -->
+            <div class="card mt-5 p-4 shadow-sm">
+                <h4 class="card-title">React to this News</h4>
+                <form method="POST" action="{% url 'validate_and_impact_news' news.id %}">
+                    {% csrf_token %}
+                    <div class="form-group mb-4">
+                        <label for="impact" class="form-label">Impact Value (0-100)</label>
+                        <input
+                            type="number"
+                            id="impact"
+                            name="impact"
+                            class="form-control"
+                            placeholder="Enter impact score"
+                            min="0"
+                            max="100"
+                            required
+                        />
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" name="validate" class="btn btn-success flex-grow-1">
+                            ✅ Validate News
+                        </button>
+                        <button type="submit" name="unvalidate" class="btn btn-danger flex-grow-1">
+                            ❌ Unvalidate News
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Feedback Messages -->
+            <div class="mt-4">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Back Button -->
+            <a href="{% url 'news_list' %}" class="btn btn-primary mt-3">Back to News List</a>
+            {% if request.user == news.author %}
+            <a href="{% url 'delete_news' news.pk %}" class="btn btn-danger mt-3">Delete Post</a>
+            {% endif %}
+            
+            <!-- Comment Section -->
+            <div class="mt-5">
+                <h5 class="mb-4">Comments</h5>
+                <form method="post" action="{% url 'add_comment' news.id %}">
+                    {% csrf_token %}
+                    <textarea name="comment" class="form-control" rows="3" placeholder="Add a comment..."></textarea>
+                    <button type="submit" class="btn btn-secondary mt-3">Post Comment</button>
+                </form>
+
+                <div class="mt-4">
+                    {% if news.comments.all %}
+                        <h6 class="mb-3">All Comments</h6>
+                        <ul class="list-group">
+                            {% for comment in news.comments.all %}
+                                <li class="list-group-item">
+                                    <strong>{{ comment.author.username }}</strong>: {{ comment.content }}
+                                    <small class="text-muted d-block">{{ comment.created_at|date:"M d, Y H:i" }}</small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted text-center">No comments yet. Be the first to comment!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

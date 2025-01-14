@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block title %}News{% endblock %}
+
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Button Group -->
+    <div class="d-flex justify-content-between mb-4">
+        <div>
+            <form method="get" action="{% url 'news_list' %}">
+                <select 
+                    class="form-select" 
+                    aria-label="Filter news" 
+                    name="filter" 
+                    onchange="this.form.submit()"
+                >
+                    <option selected disabled>{{filter}}</option>
+                    <option value="latest">Latest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="impact">Highest impact</option>
+                </select>
+            </form>
+        </div>
+        <form method="get" action="{% url 'news_search' %}">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search news..." value="{{ query|default:'' }}">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </div>
+        </form>
+        <a href="{% url 'create_news' %}" class="btn btn-success">Create News Post</a>
+    </div>
+
+    <!-- Tweets List -->
+    <div class="list-group">
+        {% for news in news_list %}
+        <a href="{% url 'news_detail' news.pk %}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ news.headline }}</h5>
+                <small class="text-muted">{{ news.created_at|date:"M d, Y" }}</small>
+            </div>
+            <p class="mb-1 text-truncate">{{ news.content }}</p>
+            <div class="d-flex align-items-center mt-2">
+                <!-- Impact Icon -->
+                <span class="me-3 d-flex align-items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3335/3335431.png" alt="Impact" width="20" height="20" class="me-1">
+                    <strong>Impact:</strong> {{ news.impact|floatformat:2  }}%
+                </span>
+                <!-- Validity Icon -->
+                <span class="d-flex align-items-center">
+                    <img src="https://cdn1.iconfinder.com/data/icons/digital-marketing-37/16/Expert_Content_valid_correct-512.png" alt="Validity" width="20" height="20" class="me-1">
+                    <strong>Validity:</strong> {{ news.validity|floatformat:2 }}%
+                </span>
+            </div>
+            <small class="text-muted">By {{ news.author.username }}</small>
+        </a>
+        {% empty %}
+        <p class="text-center text-muted">No news posts available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}Create News Post{% endblock %}
+
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Create News Post</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="headline" class="form-label">Headline</label>
+            <input type="text" class="form-control" id="headline" name="headline" value="{{ form.headline.value }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="content" class="form-label">Content</label>
+            <textarea class="form-control" id="content" name="content" rows="5" required>{{ form.content.value }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="photo" class="form-label">News Photo</label>
+            <input type="file" class="form-control" id="photo" name="photo">
+        </div>
+
+        <div class="mb-3">
+            <label for="bet" class="form-label">Bet Amount</label>
+            <input type="number" class="form-control" id="bet" name="bet" value="{{ form.bet.value }}" min="0" max="{{ half_points }}" required>
+            <small class="form-text text-muted">Bet amount must be between 0 and half of your available points.</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <select class="form-select" id="location" name="location" required>
+                <option selected disabled>Select Location</option>
+                {% for location in locations %}
+                    <option value="{{ location.id }}" {% if location.id == form.location.value %} selected {% endif %}>{{ location.address }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Create News Post</button>
+    </form>
+
+    <hr>
+
+    <h3>Add New Location</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ location_form.as_p }}
+        <button type="submit" class="btn btn-primary" name="create_location">Create Location</button>
+    </form>
+</div>
+{% endblock %}
