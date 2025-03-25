@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404
 from .forms import NewsPostForm, LocationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from birdwatch.models import PostInteraction
+
 # Create your views here.
 def news_list(request):
     filter_by = request.GET.get('filter', 'latest')
@@ -14,7 +16,7 @@ def news_list(request):
     elif filter_by == 'oldest':
         news_list = newsPost.objects.order_by('created_at', 'validity')
     elif filter_by == 'impact':
-        news_list = newsPost.objects.order_by('impact', 'validity')
+        news_list = newsPost.objects.order_by('-impact', 'validity')
     
     
     context = {
@@ -77,7 +79,11 @@ def validate_and_impact_news(request, news_id):
             messages.warning(request, "You have already reacted")
         
         else:
+            pi, created = PostInteraction.objects.get_or_create(post=news, user=request.user.profile)    
+            pi.impact = int(request.POST.get("impact"))
+            pi.comment = request.POST.get('comment', '')
             if 'validate' in request.POST:
+                pi.validity = 1
                 # Add user to validated_by and increase validity points
                 prev_validity = news.validity
                 news.validity = news.validity*news.reacted_by.count() + request.user.profile.validity
@@ -85,7 +91,6 @@ def validate_and_impact_news(request, news_id):
                 news.validity /= news.reacted_by.count()
                 
                 messages.success(request, "Thank you for validating this news.")
-
                 # Get impact value from the form
                 try:
                     impact_value = int(request.POST.get("impact"))
@@ -106,6 +111,8 @@ def validate_and_impact_news(request, news_id):
                 except (ValueError, TypeError):
                     messages.error(request, "Invalid impact value.")
             elif 'unvalidate' in request.POST:
+                
+                pi.validity = 0
                 # Add user to unvalidated_by and decrease validity points
                 prev_validity = news.validity
                 news.validity = news.validity*news.reacted_by.count() - request.user.profile.validity
@@ -130,6 +137,7 @@ def validate_and_impact_news(request, news_id):
                         messages.warning(request, "Impact value must be between 0 and 100.")
                 except (ValueError, TypeError):
                     messages.error(request, "Invalid impact value.")
+            pi.save()            
         news.author.profile.save()
         news.save()
     return redirect('news_detail', pk=news_id)

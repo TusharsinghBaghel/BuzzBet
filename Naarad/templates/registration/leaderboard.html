@@ -3,48 +3,109 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center mb-4">🏆 Leaderboard</h1>
+    <h1 class="text-center mb-4 text-danger">🏆 Leaderboard</h1>
 
-    
     <!-- Leaderboard Table -->
     <div class="table-responsive">
-        <table class="table table-hover table-bordered shadow-sm">
-            <thead class="table-dark">
-                <tr>
+        <table class="table table-hover table-bordered shadow-sm rounded">
+            <thead class="thead-dark">
+                <tr class="bg-danger text-white">
                     <th>Rank</th>
                     <th>User</th>
                     <th>Points</th>
                     <th>Validity</th>
-                    
                 </tr>
             </thead>
             <tbody>
                 {% for profile in leaderboard_data %}
-                <tr>
+                <tr class="{% if profile.user == request.user %}table-success{% endif %}">
                     <td>{{ forloop.counter }}</td>
                     <td>
-                        <a href="{% url 'profile_with_pk' profile.user.pk %}" class="text-decoration-none">
-                            {{ profile.user.username }}
+                        <a href="{% url 'profile_with_pk' profile.user.pk %}" class="text-decoration-none text-danger">
+                            {{ profile.user.username }} 
+                            {% if profile.user == request.user %} 
+                                <span class="badge bg-danger">You</span> 
+                            {% endif %}
                         </a>
                     </td>
-                    <td>
-                            {{ profile.points }}
-                        
-                    </td>
-                    <td>
-                            {{ profile.validity }}%
-                    </td>
-                    
+                    <td>{{ profile.points }}</td>
+                    <td>{{ profile.validity }}%</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center text-muted">No data available.</td>
+                    <td colspan="4" class="text-center text-muted">No data available.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
+
+<!-- Additional Styling -->
+<style>
+    /* Table styles */
+    .table {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.1rem;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .table th, .table td {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-success {
+        background-color: #d4edda !important;
+    }
+
+    .thead-dark {
+        background-color: #343a40;
+        color: white;
+    }
+
+    /* Emoji and Badge styling */
+    .badge {
+        font-size: 0.9rem;
+        padding: 0.5em 1em;
+        border-radius: 50px;
+    }
+
+    .badge.bg-danger {
+        background-color: #dc3545;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 768px) {
+        .table-responsive {
+            font-size: 0.9rem;
+        }
+
+        .table th, .table td {
+            padding: 10px;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.4em 0.8em;
+        }
+    }
+
+    /* Header Styling */
+    h1 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+    }
+</style>
+
 {% endblock %}
-
-

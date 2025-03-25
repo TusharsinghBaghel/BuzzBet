@@ -1,33 +1,31 @@
 {% extends "layout.html" %}
 {% block title %}{{ news.headline }}{% endblock %}
 
-
-
 {% block content %}
 <div class="container mt-5">
     <!-- News Details -->
     <div class="row">
         <div class="col-lg-8 mx-auto">
             <!-- News Photo -->
-            
-            <h1 class="display-4 fw-bold">{{ news.headline }}</h1>
+            <h1 class="display-4 fw-bold text-light">{{ news.headline }}</h1>
             {% if news.photo %}
                 <div class="text-center my-4">
                     <img src="{{ news.photo.url }}" class="img-fluid rounded shadow-sm" alt="{{ news.headline }}">
                 </div>
             {% endif %}
 
-            <a href="{% url 'profile_with_pk' news.author.pk %}"><p class="text-muted">By <strong>{{ news.author.username }}</strong> | {{ news.created_at|date:"M d, Y" }}</p></a>
-            <p class="lead">{{ news.content }}</p>
-            
-            
+            <a href="{% url 'profile_with_pk' news.author.pk %}">
+                <p class="text-muted">By <strong>{{ news.author.username }}</strong> | {{ news.created_at|date:"M d, Y" }}</p>
+            </a>
+            <p class="lead text-light">{{ news.content }}</p>
+
             <!-- Validation and Impact Form -->
-            <div class="card mt-5 p-4 shadow-sm">
-                <h4 class="card-title">React to this News</h4>
+            <div class="card mt-5 p-4 shadow-lg rounded" style="background-color: #2b2b2b;">
+                <h4 class="card-title text-danger">React to this News</h4>
                 <form method="POST" action="{% url 'validate_and_impact_news' news.id %}">
                     {% csrf_token %}
                     <div class="form-group mb-4">
-                        <label for="impact" class="form-label">Impact Value (0-100)</label>
+                        <label for="impact" class="form-label text-light">Impact Value (0-100)</label>
                         <input
                             type="number"
                             id="impact"
@@ -42,10 +40,10 @@
 
                     <div class="d-flex gap-3">
                         <button type="submit" name="validate" class="btn btn-success flex-grow-1">
-                            ✅ Validate News
+                            <i class="bi bi-check-circle me-2"></i> Validate News
                         </button>
                         <button type="submit" name="unvalidate" class="btn btn-danger flex-grow-1">
-                            ❌ Unvalidate News
+                            <i class="bi bi-x-circle me-2"></i> Unvalidate News
                         </button>
                     </div>
                 </form>
@@ -56,7 +54,7 @@
                 {% if messages %}
                     {% for message in messages %}
                         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                            {{ message }}
+                            <i class="bi bi-info-circle me-2"></i>{{ message }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     {% endfor %}
@@ -64,26 +62,31 @@
             </div>
 
             <!-- Back Button -->
-            <a href="{% url 'news_list' %}" class="btn btn-primary mt-3">Back to News List</a>
+            <a href="{% url 'news_list' %}" class="btn btn-primary mt-3">
+                <i class="bi bi-arrow-left-circle me-2"></i>Back to News List
+            </a>
+            
             {% if request.user == news.author %}
-            <a href="{% url 'delete_news' news.pk %}" class="btn btn-danger mt-3">Delete Post</a>
+            <a href="{% url 'delete_news' news.pk %}" class="btn btn-danger mt-3">
+                <i class="bi bi-trash me-2"></i>Delete Post
+            </a>
             {% endif %}
             
             <!-- Comment Section -->
             <div class="mt-5">
-                <h5 class="mb-4">Comments</h5>
+                <h5 class="mb-4 text-light">Comments</h5>
                 <form method="post" action="{% url 'add_comment' news.id %}">
                     {% csrf_token %}
-                    <textarea name="comment" class="form-control" rows="3" placeholder="Add a comment..."></textarea>
-                    <button type="submit" class="btn btn-secondary mt-3">Post Comment</button>
+                    <textarea name="comment" class="form-control" rows="3" placeholder="Add a comment..." style="background-color: #333; color: #fff;"></textarea>
+                    <button type="submit" class="btn btn-danger mt-3">Post Comment</button>
                 </form>
 
                 <div class="mt-4">
                     {% if news.comments.all %}
-                        <h6 class="mb-3">All Comments</h6>
+                        <h6 class="mb-3 text-light">All Comments</h6>
                         <ul class="list-group">
                             {% for comment in news.comments.all %}
-                                <li class="list-group-item">
+                                <li class="list-group-item" style="background-color: #444; color: #fff;">
                                     <strong>{{ comment.author.username }}</strong>: {{ comment.content }}
                                     <small class="text-muted d-block">{{ comment.created_at|date:"M d, Y H:i" }}</small>
                                 </li>
@@ -97,4 +100,99 @@
         </div>
     </div>
 </div>
+
+<!-- Additional Styling -->
+<style>
+    /* Overall Page Styling */
+    .container {
+        font-family: 'Roboto', sans-serif;
+        color: #f8f9fa;
+    }
+
+    /* Headline Styling */
+    .display-4 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #f8f9fa;
+        text-align: center;
+    }
+
+    /* Card Styling */
+    .card {
+        background-color: #2b2b2b;
+        border-radius: 10px;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #dc3545;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        color: #fff;
+        background-color: #333;
+    }
+
+    .btn {
+        font-weight: 600;
+        border-radius: 20px;
+    }
+
+    .btn-success, .btn-danger {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+    /* Icon Styles */
+    .bi {
+        font-size: 1.2rem;
+    }
+
+    .btn-success i, .btn-danger i {
+        font-size: 1.4rem;
+    }
+
+    /* Comment Section Styling */
+    .list-group-item {
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        color: #fff;
+        background-color: #444;
+    }
+
+    .list-group-item:hover {
+        background-color: #555;
+    }
+
+    /* Button Hover Effect */
+    .btn:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive Styling */
+    @media (max-width: 768px) {
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .display-4 {
+            font-size: 2rem;
+        }
+
+        .card {
+            padding: 20px;
+        }
+    }
+</style>
+
 {% endblock %}

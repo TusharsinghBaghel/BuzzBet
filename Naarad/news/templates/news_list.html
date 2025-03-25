@@ -1,9 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}News{% endblock %}
 
+{% block title %}News{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
+
     <!-- Button Group -->
     <div class="d-flex justify-content-between mb-4">
         <div>
@@ -30,32 +31,128 @@
         <a href="{% url 'create_news' %}" class="btn btn-success">Create News Post</a>
     </div>
 
-    <!-- Tweets List -->
+    <!-- News List -->
     <div class="list-group">
         {% for news in news_list %}
-        <a href="{% url 'news_detail' news.pk %}" class="list-group-item list-group-item-action">
+        <a href="{% url 'news_detail' news.pk %}" class="list-group-item list-group-item-action shadow-sm rounded mb-3" style="background-color: #222; border-left: 5px solid #D32F2F; transition: transform 0.3s; cursor: pointer; color: #fff;">
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{{ news.headline }}</h5>
+                <h5 class="mb-1" style="font-size: 1.25rem; font-weight: bold; color: #fff;">{{ news.headline }}</h5>
                 <small class="text-muted">{{ news.created_at|date:"M d, Y" }}</small>
             </div>
-            <p class="mb-1 text-truncate">{{ news.content }}</p>
+            <p class="mb-1 text-truncate" style="font-size: 1.1rem; color: #ddd;">{{ news.content }}</p>
             <div class="d-flex align-items-center mt-2">
                 <!-- Impact Icon -->
-                <span class="me-3 d-flex align-items-center">
+                <span class="me-3 d-flex align-items-center text-warning">
                     <img src="https://cdn-icons-png.flaticon.com/512/3335/3335431.png" alt="Impact" width="20" height="20" class="me-1">
-                    <strong>Impact:</strong> {{ news.impact|floatformat:2  }}%
+                    <strong>Impact:</strong> {{ news.impact|floatformat:2 }}%
                 </span>
                 <!-- Validity Icon -->
-                <span class="d-flex align-items-center">
+                <span class="d-flex align-items-center text-success">
                     <img src="https://cdn1.iconfinder.com/data/icons/digital-marketing-37/16/Expert_Content_valid_correct-512.png" alt="Validity" width="20" height="20" class="me-1">
                     <strong>Validity:</strong> {{ news.validity|floatformat:2 }}%
                 </span>
+                {% if news.birdwatch_validity == 0 %}
+                <span class="d-flex align-items-center text-danger">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Wrong" width="20" height="20" class="me-1">
+                    <strong></strong> Seems fishy
+                </span>
+                {% elif news.birdwatch_validity == 1 %}
+                <span class="d-flex align-items-center text-primary">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828640.png" alt="Tick" width="20" height="20" class="me-1">
+                    <strong>Verified by Birdwatch</strong> 
+                </span>
+                {% elif news.birdwatch_validity == 0.5 %}
+                <span class="d-flex align-items-center text-warning">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="Needs Voting" width="20" height="20" class="me-1">
+                    <strong>Needs More Voting:</strong> 
+                </span>
+                {% endif %}
             </div>
-            <small class="text-muted">By {{ news.author.username }}</small>
+            <small class="text-light">By {{ news.author.username }}</small>
         </a>
         {% empty %}
         <p class="text-center text-muted">No news posts available.</p>
         {% endfor %}
     </div>
 </div>
+
+<!-- Additional Styling -->
+<style>
+    /* Overall Page Styling */
+    .container {
+        font-family: 'Roboto', sans-serif;
+        color:rgb(50, 56, 62);
+    }
+
+    /* News Item Styling */
+    .list-group-item {
+        padding: 20px;
+        border-radius: 10px;
+        transition: transform 0.2s ease-in-out;
+        background-color:rgb(59, 54, 54) !important; /* Dark background for list items */
+        color: #fff; /* Contrasting text color */
+    }
+
+    .list-group-item:hover {
+        transform: translateY(-5px);
+        background-color: #333; /* Slightly lighter on hover */
+    }
+
+    /* Button Styling */
+    .btn {
+        font-weight: 600;
+        border-radius: 20px;
+    }
+
+    .btn-success {
+        background-color: #D32F2F;
+        color: #fff;
+        border-color: #D32F2F;
+    }
+
+    .btn-success:hover {
+        background-color: #B71C1C;
+        border-color: #B71C1C;
+    }
+
+    /* Search Bar Styling */
+    .input-group {
+        max-width: 350px;
+        margin-left: 20px;
+    }
+
+    .input-group input {
+        border-radius: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        color: #333;
+    }
+
+    .input-group button {
+        border-radius: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    /* Impact/Validity Icons */
+    .me-1 {
+        margin-right: 0.5rem;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 768px) {
+        .input-group {
+            width: 100%;
+        }
+
+        .list-group-item {
+            padding: 15px;
+        }
+
+        .btn {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
 {% endblock %}
