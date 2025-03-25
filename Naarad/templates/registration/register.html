@@ -5,11 +5,15 @@ Register
 {% endblock %}
 
 {% block navbar %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'index' %}">
-            <img src="https://e7.pngegg.com/pngimages/726/169/png-clipart-australian-broadcasting-corporation-abc-logo-television-c-television-text.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
-            Naarad
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+            <img src="https://img.icons8.com/ios11/512/FFFFFF/news.png" 
+                 alt="Logo" 
+                 width="30" 
+                 height="24" 
+                 class="d-inline-block align-text-top me-2">
+            <span class="fw-bold text-danger">BuzzBet</span>
         </a>
     </div>
 </nav>

@@ -24,7 +24,8 @@ class newsPost(models.Model):
         default = 0.0,
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)]
     )
-    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null = True, blank = True)
+    birdwatch_validity = models.FloatField(default=0.0, validators=[MinValueValidator(0.0), MaxValueValidator(100.0)])
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
     reacted_by = models.ManyToManyField(User, related_name='reactions', blank=True)
     def __str__(self):
         return self.headline

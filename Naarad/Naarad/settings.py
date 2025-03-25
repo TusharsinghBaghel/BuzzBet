@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'home',
     'accounts',
-    'news'
+    'news',
+    'birdwatch'
 ]
 
 MIDDLEWARE = [

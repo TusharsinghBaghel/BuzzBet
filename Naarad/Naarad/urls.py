@@ -26,6 +26,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),  # Include the auth URLs
     path('accounts/', include('accounts.urls')),
     path('news/', include('news.urls')),
+    path('birdwatch/', include('birdwatch.urls')),
     
 
 

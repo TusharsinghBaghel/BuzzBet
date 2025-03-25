@@ -1,18 +1,22 @@
 {% extends "layout.html" %}
 
 {% block title %}
- Naarad
+BuzzBet
 {% endblock %}
 
 {% block navbar %}
-<nav class="navbar bg-body-tertiary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'index' %}">
-        <img src="https://e7.pngegg.com/pngimages/726/169/png-clipart-australian-broadcasting-corporation-abc-logo-television-c-television-text.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-        Naarad
-      </a>
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+            <img src="https://img.icons8.com/ios11/512/FFFFFF/news.png" 
+                 alt="Logo" 
+                 width="30" 
+                 height="24" 
+                 class="d-inline-block align-text-top me-2">
+            <span class="fw-bold text-danger">BuzzBet</span>
+        </a>
     </div>
-  </nav>
+</nav>
 {% endblock navbar %}
 
 {% block content %}
@@ -20,29 +24,38 @@
     <div class="row w-100">
         <!-- Intro Section -->
         <div class="col-md-6 d-flex flex-column justify-content-center align-items-start px-5">
-            <h1 class="display-4 fw-bold mb-3 text-danger">Welcome to Naarad</h1>
+            <h1 class="display-4 fw-bold mb-3 text-danger">Welcome to BuzzBet</h1>
             <p class="lead text-light mb-4">
-                A gamified, community-powered platform bringing real news right to your fingertips. 
+                A gamified, community-powered platform bringing real news right to your fingertips.
             </p>
-            <div>
+            <div class="d-flex flex-wrap gap-2">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'news_list' %}" class="btn btn-secondary btn-lg me-3">Go to News</a>
-                    <form method="post" action="{% url 'logout' %}" class="d-inline" onsubmit="return confirm('Are you sure you want to log out?');">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-lg me-3">Logout</button>
-                    </form>
+                <a href="{% url 'news_list' %}" 
+                    class="btn btn-secondary btn-lg shadow-sm" 
+                    style="width: 150px; text-align: center; font-size: 16px; padding: 10px 20px;">
+                    Go to News
+                </a>
+                <form method="post" action="{% url 'logout' %}" class="d-inline" 
+                    onsubmit="return confirm('Are you sure you want to log out?');" 
+                    style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" 
+                            class="btn btn-danger btn-lg shadow-sm" 
+                            style="width: 150px; text-align: center; font-size: 16px; padding: 10px 20px;">
+                        Logout
+                    </button>
+                </form>
                 {% else %}
-                    <a href="{% url 'register' %}" class="btn btn-success btn-lg me-3">Register</a>
-                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-3">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-success btn-lg shadow-sm">Register</a>
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg shadow-sm">Login</a>
                 {% endif %}
-                
-                <a href="/know-more" class="btn btn-outline-info btn-lg">Know More</a>
+                <a href="/know-more" class="btn btn-outline-info btn-lg shadow-sm">Know More</a>
             </div>
         </div>
 
         <!-- Graphics/Image Section -->
         <div class="col-md-6 d-flex justify-content-center align-items-center">
-            <img src="static\landing.png" alt="Landing Graphic" class="img-fluid" style="max-height: 70vh;">
+            <img src="static/landing.png" alt="Landing Graphic" class="img-fluid rounded shadow-lg" style="max-height: 70vh;">
         </div>
     </div>
 </div>
